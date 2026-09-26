@@ -2,7 +2,7 @@
    Guarda la receta en el celular para que funcione sin señal en la cocina.
    Subir un cambio = subir la VERSION. Al cerrar y reabrir la app entra la nueva. */
 
-const VERSION = 'sticky-v2';
+const VERSION = 'sticky-v3';
 const BASE = new URL('./', self.location).pathname;
 
 const ESENCIAL = [

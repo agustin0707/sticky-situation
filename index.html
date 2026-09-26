@@ -35,6 +35,7 @@
   --r:5px;      /* radio de botones y cajas */
   --r-s:3px;    /* radio de elementos chicos: checks, pastillas */
   --gutter:22px;
+  --safe-top:env(safe-area-inset-top, 0px);
 }
 /* Iconos de trazo: acompañan sin competir con las ilustraciones a tinta */
 .ico{
@@ -68,12 +69,12 @@ button{font:inherit;color:inherit}
   display:grid;grid-template-columns:auto 1fr;
 }
 .portada .titulo{
-  height:calc(100svh - 28px - env(safe-area-inset-top));min-height:520px;width:auto;
-  margin:calc(14px + env(safe-area-inset-top)) 0 0 0;
+  height:calc(100svh - 28px - var(--safe-top));min-height:520px;width:auto;
+  margin:calc(14px + var(--safe-top)) 0 0 0;
   opacity:0;filter:blur(8px);transform:translateY(24px);
   animation:blurUp 1.1s var(--ease) .1s forwards;
 }
-.portada .lado{position:relative;padding:calc(30px + env(safe-area-inset-top)) 14px 0 16px}
+.portada .lado{position:relative;padding:calc(30px + var(--safe-top)) 14px 0 16px}
 .portada .intro{
   font-size:13px;line-height:1.45;color:var(--gris);max-width:none;
   opacity:0;animation:blurUp 1s var(--ease) .5s forwards;
@@ -144,7 +145,7 @@ button{font:inherit;color:inherit}
 /* =========================================================
    PANELES
    ========================================================= */
-.panel{display:none;padding:88px 0 52px}
+.panel{display:none;padding:calc(84px + var(--safe-top)) 0 52px}
 .panel.activo{display:block;animation:blurUp .6s var(--ease) both;opacity:0;filter:blur(6px);transform:translateY(14px)}
 .cab{display:grid;grid-template-columns:1fr auto;align-items:end;gap:14px}
 .cab h2{font-size:clamp(52px,15.5vw,84px);line-height:.84;align-self:end}
@@ -256,17 +257,21 @@ h3 small{font-family:'Inter';font-size:12px;color:var(--gris);letter-spacing:0;t
 
 /* Pantalla encendida */
 .pantalla{
-  position:fixed;top:calc(10px + env(safe-area-inset-top));right:10px;z-index:45;
+  position:fixed;top:calc(10px + var(--safe-top));right:10px;z-index:45;
   display:none;align-items:center;gap:6px;cursor:pointer;
   background:var(--papel);border:1.5px solid var(--tinta);padding:6px 10px 4px;border-radius:var(--r);
   font-family:'Bebas Neue';font-size:15px;letter-spacing:.06em
 }
 .pantalla.ver{display:inline-flex}
-.pantalla::after{
-  content:'';position:fixed;top:0;left:0;right:0;z-index:-1;pointer-events:none;
-  height:calc(74px + env(safe-area-inset-top));
-  background:linear-gradient(var(--papel) calc(46px + env(safe-area-inset-top)), rgba(239,233,222,0))
+/* Velo de papel pegado al borde de arriba: tapa también la zona del reloj */
+.velo{
+  position:fixed;top:0;left:0;right:0;z-index:44;pointer-events:none;
+  height:calc(78px + var(--safe-top));
+  background:linear-gradient(var(--papel) calc(52px + var(--safe-top)), rgba(239,233,222,0));
+  opacity:0;transition:opacity .35s var(--ease)
 }
+.velo.ver{opacity:1}
+#contenido{padding-top:calc(86px + var(--safe-top))}
 .pantalla span{max-width:120px;overflow:hidden;white-space:nowrap;transition:max-width .5s var(--ease),opacity .3s}
 .pantalla.chico{padding:0;width:30px;height:30px;justify-content:center;gap:0}
 .pantalla.chico span{display:none}
@@ -279,7 +284,7 @@ h3 small{font-family:'Inter';font-size:12px;color:var(--gris);letter-spacing:0;t
    ========================================================= */
 .cocina{
   position:fixed;inset:0;z-index:80;background:var(--papel);display:none;flex-direction:column;
-  padding:calc(14px + env(safe-area-inset-top)) 0 calc(14px + env(safe-area-inset-bottom))
+  padding:calc(14px + var(--safe-top)) 0 calc(14px + env(safe-area-inset-bottom))
 }
 .cocina.ver{display:flex}
 .cocina > .wrap,.cocina .escena .wrap{width:100%}
@@ -476,6 +481,7 @@ h3 small{font-family:'Inter';font-size:12px;color:var(--gris);letter-spacing:0;t
 
 <nav class="nav" id="nav"><div class="wrap" id="tabs"></div></nav>
 <div class="activos" id="activos"></div>
+<div class="velo" id="velo" aria-hidden="true"></div>
 <button class="pantalla" id="pantalla"><i></i><span>Pantalla fija</span></button>
 
 <!-- ===== MODO COCINA ===== -->
@@ -1034,7 +1040,7 @@ gallo.addEventListener('click', () => {
   if(navigator.vibrate) navigator.vibrate([40,40,40,40,80]);
 });
 
-$('#bajar').onclick = () => window.scrollTo({top: $('#contenido').offsetTop - 70, behavior:'smooth'});
+$('#bajar').onclick = () => window.scrollTo({top: $('#contenido').offsetTop, behavior:'smooth'});
 $('#toastOk').onclick = () => {
   $('#toast').classList.remove('ver');
   // Apagar los timers que ya sonaron
@@ -1046,6 +1052,7 @@ $('#toastOk').onclick = () => {
 new IntersectionObserver(([en]) => {
   $('#nav').classList.toggle('ver', !en.isIntersecting);
   $('#pantalla').classList.toggle('ver', !en.isIntersecting);
+  $('#velo').classList.toggle('ver', !en.isIntersecting);
   tick();
 }, {threshold:.35}).observe($('.portada'));
 
