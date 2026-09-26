@@ -1,7 +1,7 @@
 /* Contenido de la receta. Cada paso puede tener "min" (timer en minutos) y "tip". */
 const RECETA = [
   {
-    id:'trago', nombre:'Momento Moment', sub:'Para abrir mientras cocinan',
+    id:'trago', nombre:'Momento Moment', titulo:'Momento<br>Moment', sub:'Para abrir mientras cocinan',
     ingredientes:[
       ['Canada Dry bien helada','1 lata c/u'],
       ['Hielo','a gusto'],
@@ -16,7 +16,7 @@ const RECETA = [
     ]
   },
   {
-    id:'plato', nombre:'The Glow Up', sub:'Pollo crocante con salsa de miel, mantequilla y ajo',
+    id:'plato', nombre:'The Glow Up', titulo:'The Glow<br>Up', sub:'Pollo crocante con salsa de miel, mantequilla y ajo',
     grupos:[
       {titulo:'Pollo', items:[
         ['Trutro de pollo deshuesado, en trozos chicos','600 g'],
@@ -60,7 +60,7 @@ const RECETA = [
     ]
   },
   {
-    id:'postre', nombre:'Double Dip', sub:'Cookie fries de mantequilla tostada con dos chocolates para mojar',
+    id:'postre', nombre:'Double Dip', titulo:'Double<br>Dip', sub:'Cookie fries de mantequilla tostada con dos chocolates para mojar',
     grupos:[
       {titulo:'Masa', items:[
         ['Mantequilla sin sal','168 g'],
