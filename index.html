@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="assets/icono-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Sticky Situation">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -145,7 +145,7 @@ button{font:inherit;color:inherit}
 /* =========================================================
    PANELES
    ========================================================= */
-.panel{display:none;padding:calc(84px + var(--safe-top)) 0 52px}
+.panel{display:none;padding:calc(96px + var(--safe-top)) 0 52px}
 .panel.activo{display:block;animation:blurUp .6s var(--ease) both;opacity:0;filter:blur(6px);transform:translateY(14px)}
 .cab{display:grid;grid-template-columns:1fr auto;align-items:end;gap:14px}
 .cab h2{font-size:clamp(52px,15.5vw,84px);line-height:.84;align-self:end}
@@ -263,15 +263,22 @@ h3 small{font-family:'Inter';font-size:12px;color:var(--gris);letter-spacing:0;t
   font-family:'Bebas Neue';font-size:15px;letter-spacing:.06em
 }
 .pantalla.ver{display:inline-flex}
-/* Velo de papel pegado al borde de arriba: tapa también la zona del reloj */
+/* Velo de papel: papel sólido detrás del reloj, la batería y la señal.
+   Se estira una barra hacia arriba porque iOS, en la app instalada, a veces
+   ancla los elementos fijos bajo la barra de estado en vez del borde real. */
 .velo{
-  position:fixed;top:0;left:0;right:0;z-index:44;pointer-events:none;
-  height:calc(78px + var(--safe-top));
-  background:linear-gradient(var(--papel) calc(52px + var(--safe-top)), rgba(239,233,222,0));
+  position:fixed;left:0;right:0;z-index:44;pointer-events:none;
+  top:calc(-1 * var(--safe-top));
+  height:calc(52px + 2 * var(--safe-top));
+  background:var(--papel);
   opacity:0;transition:opacity .35s var(--ease)
 }
+.velo::after{
+  content:'';position:absolute;left:0;right:0;top:100%;height:28px;
+  background:linear-gradient(var(--papel), rgba(239,233,222,0))
+}
 .velo.ver{opacity:1}
-#contenido{padding-top:calc(86px + var(--safe-top))}
+#contenido{padding-top:calc(96px + var(--safe-top))}
 .pantalla span{max-width:120px;overflow:hidden;white-space:nowrap;transition:max-width .5s var(--ease),opacity .3s}
 .pantalla.chico{padding:0;width:30px;height:30px;justify-content:center;gap:0}
 .pantalla.chico span{display:none}
